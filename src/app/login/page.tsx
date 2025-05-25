@@ -138,7 +138,7 @@ export default function LoginPage() {
         {/* Footer */}
         <div className="text-center mt-8">
           <p className="text-gray-500 text-sm">
-            Built with ❤️ using Next.js and enterprise-grade security
+            Built by Deven using ClaudeAI
           </p>
         </div>
       </div>

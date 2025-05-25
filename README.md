@@ -181,4 +181,4 @@ For support, please open an issue on GitHub or contact the development team.
 
 ---
 
-Built with ❤️ using Next.js and modern web technologies. # Environment variables configured for production
+Built by Deven using ClaudeAI # Environment variables configured for production

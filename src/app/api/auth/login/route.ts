@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { SignJWT } from 'jose';
 
 const DASHBOARD_PASSWORD = process.env.DASHBOARD_PASSWORD || 'CRYPTODASHp@ss2025';
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secure-jwt-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'deven-crypto-dashboard-jwt-secret-key-super-secure-2025';
 
 export async function POST(request: NextRequest) {
   try {

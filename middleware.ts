@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secure-jwt-secret-key';
-
 // Define public routes that don't require authentication
 const publicRoutes = ['/login', '/api/auth/login'];
 
@@ -33,14 +31,18 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
+    // Get JWT secret from environment or use fallback
+    const jwtSecret = process.env.JWT_SECRET || 'deven-crypto-dashboard-jwt-secret-key-super-secure-2025';
+    const secret = new TextEncoder().encode(jwtSecret);
+    
     // Verify JWT token
-    const secret = new TextEncoder().encode(JWT_SECRET);
     await jwtVerify(token, secret);
     
     // Token is valid, continue
     return NextResponse.next();
   } catch (error) {
     // Token is invalid or expired, redirect to login
+    console.log('JWT verification failed:', error);
     const response = NextResponse.redirect(new URL('/login', request.url));
     
     // Clear invalid token

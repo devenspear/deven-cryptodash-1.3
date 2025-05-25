@@ -9,10 +9,10 @@ export function HoldingsTable() {
   const { getPortfolioData } = usePortfolioStore();
   const portfolioData = getPortfolioData();
 
-  const getCoinMarketCapUrl = (symbol: string) => {
-    // Convert symbol to lowercase and handle special cases
-    const formattedSymbol = symbol.toLowerCase();
-    return `https://coinmarketcap.com/currencies/${formattedSymbol}/`;
+  const getTradingViewUrl = (symbol: string) => {
+    // Convert symbol to TradingView format (most cryptos are SYMBOL + USD)
+    const tradingViewSymbol = `${symbol.toUpperCase()}USD`;
+    return `https://www.tradingview.com/chart/?symbol=${tradingViewSymbol}`;
   };
 
   return (
@@ -81,11 +81,11 @@ export function HoldingsTable() {
                   </td>
                   <td className="py-4 px-4 text-center">
                     <a
-                      href={getCoinMarketCapUrl(position.symbol)}
+                      href={getTradingViewUrl(position.symbol)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center space-x-1 text-crypto-accent hover:text-crypto-primary transition-colors group"
-                      title={`View ${position.symbol} chart on CoinMarketCap`}
+                      title={`View ${position.symbol} chart on TradingView`}
                     >
                       <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
                       <span className="text-sm font-medium">Chart</span>

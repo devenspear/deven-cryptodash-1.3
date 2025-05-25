@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deven - Developer & Crypto Enthusiast</title>
+    <meta name="description" content="Deven's personal website - Developer, crypto enthusiast, and project creator">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom styles -->
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+        .card-gradient {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .crypto-primary { color: #00d4ff; }
+        .crypto-accent { color: #7c3aed; }
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    
+    <!-- Navigation -->
+    <nav class="container mx-auto px-6 py-6">
+        <div class="flex items-center justify-between">
+            <div class="text-2xl font-bold crypto-primary">
+                Deven
+            </div>
+            <div class="space-x-6">
+                <a href="#about" class="hover:text-blue-400 transition-colors">About</a>
+                <a href="#projects" class="hover:text-blue-400 transition-colors">Projects</a>
+                <a href="#contact" class="hover:text-blue-400 transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="container mx-auto px-6 py-20 text-center">
+        <h1 class="text-6xl font-bold mb-6">
+            Hi, I'm <span class="crypto-primary">Deven</span>
+        </h1>
+        <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            Developer, crypto enthusiast, and creator of digital experiences. 
+            Building the future one project at a time.
+        </p>
+        
+        <!-- CTA Button -->
+        <a href="https://cryptodash.deven.site" 
+           class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 
+                  text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 hover-glow">
+            🚀 View My Crypto Dashboard
+        </a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="container mx-auto px-6 py-20">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold mb-12 text-center">About Me</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card-gradient p-8 rounded-xl">
+                    <h3 class="text-2xl font-semibold mb-4 crypto-primary">Developer</h3>
+                    <p class="text-gray-300">
+                        Passionate about creating clean, efficient code and building applications 
+                        that solve real-world problems. Experienced in modern web technologies 
+                        and always learning new skills.
+                    </p>
+                </div>
+                <div class="card-gradient p-8 rounded-xl">
+                    <h3 class="text-2xl font-semibold mb-4 crypto-accent">Crypto Enthusiast</h3>
+                    <p class="text-gray-300">
+                        Deep interest in cryptocurrency markets, blockchain technology, and DeFi. 
+                        Building tools to track and analyze digital asset portfolios with 
+                        real-time data and insights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="container mx-auto px-6 py-20">
+        <h2 class="text-4xl font-bold mb-12 text-center">Featured Project</h2>
+        <div class="max-w-4xl mx-auto">
+            <div class="card-gradient p-8 rounded-xl hover-glow transition-all duration-300">
+                <div class="flex items-start justify-between mb-6">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-2 crypto-primary">Crypto Portfolio Dashboard</h3>
+                        <p class="text-gray-400">Enterprise-grade cryptocurrency tracking platform</p>
+                    </div>
+                    <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm font-medium">
+                        Live
+                    </span>
+                </div>
+                
+                <p class="text-gray-300 mb-6">
+                    A comprehensive cryptocurrency portfolio tracker with real-time price data, 
+                    enterprise security, and professional analytics. Features include live market data, 
+                    portfolio allocation charts, performance tracking, and secure authentication.
+                </p>
+                
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm">Next.js</span>
+                    <span class="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full text-sm">TypeScript</span>
+                    <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">TailwindCSS</span>
+                    <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-sm">CoinGecko API</span>
+                    <span class="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-sm">JWT Auth</span>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <a href="https://cryptodash.deven.site" 
+                       class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg 
+                              transition-colors duration-300 font-medium">
+                        View Live Dashboard
+                    </a>
+                    <a href="https://github.com/devenspear/DevenCryptoDash1.0" 
+                       class="border border-gray-600 hover:border-gray-400 text-gray-300 
+                              hover:text-white px-6 py-3 rounded-lg transition-colors duration-300 font-medium">
+                        View Source
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="container mx-auto px-6 py-20">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-8">Get In Touch</h2>
+            <p class="text-gray-300 mb-8">
+                Interested in collaborating or have questions about my projects? 
+                Feel free to reach out!
+            </p>
+            
+            <div class="flex justify-center space-x-6">
+                <a href="mailto:contact@deven.site" 
+                   class="card-gradient p-4 rounded-lg hover-glow transition-all duration-300">
+                    <div class="text-2xl mb-2">📧</div>
+                    <div class="text-sm text-gray-400">Email</div>
+                </a>
+                <a href="https://github.com/devenspear" 
+                   class="card-gradient p-4 rounded-lg hover-glow transition-all duration-300">
+                    <div class="text-2xl mb-2">💻</div>
+                    <div class="text-sm text-gray-400">GitHub</div>
+                </a>
+                <a href="https://cryptodash.deven.site" 
+                   class="card-gradient p-4 rounded-lg hover-glow transition-all duration-300">
+                    <div class="text-2xl mb-2">📊</div>
+                    <div class="text-sm text-gray-400">Dashboard</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container mx-auto px-6 py-8 mt-20 border-t border-gray-800">
+        <div class="text-center text-gray-400">
+            <p>&copy; 2025 Deven. Built with passion for crypto and clean code.</p>
+            <p class="mt-2 text-sm">
+                <a href="https://cryptodash.deven.site" class="crypto-primary hover:underline">
+                    Crypto Dashboard
+                </a> | 
+                <a href="https://github.com/devenspear/DevenCryptoDash1.0" class="crypto-accent hover:underline">
+                    Source Code
+                </a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html> 

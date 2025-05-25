@@ -2,20 +2,17 @@
 
 import { usePortfolioStore } from '@/lib/store';
 import { formatPrice, formatNumber } from '@/lib/api';
-import { getCategoryForSymbol, CATEGORY_COLORS, RISK_LEVELS } from '@/lib/constants';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { getCategoryForSymbol, CATEGORY_COLORS } from '@/lib/constants';
+import { TrendingUp, TrendingDown, ExternalLink } from 'lucide-react';
 
 export function HoldingsTable() {
   const { getPortfolioData } = usePortfolioStore();
   const portfolioData = getPortfolioData();
 
-  const getRiskBadgeColor = (riskLevel: string) => {
-    switch (riskLevel) {
-      case 'low': return 'bg-crypto-success/20 text-crypto-success';
-      case 'medium': return 'bg-crypto-warning/20 text-crypto-warning';
-      case 'high': return 'bg-crypto-danger/20 text-crypto-danger';
-      default: return 'bg-gray-500/20 text-gray-400';
-    }
+  const getCoinMarketCapUrl = (symbol: string) => {
+    // Convert symbol to lowercase and handle special cases
+    const formattedSymbol = symbol.toLowerCase();
+    return `https://coinmarketcap.com/currencies/${formattedSymbol}/`;
   };
 
   return (
@@ -31,13 +28,12 @@ export function HoldingsTable() {
               <th className="text-right py-3 px-4 text-gray-400 font-medium">Value</th>
               <th className="text-right py-3 px-4 text-gray-400 font-medium">24h Change</th>
               <th className="text-right py-3 px-4 text-gray-400 font-medium">Allocation</th>
-              <th className="text-right py-3 px-4 text-gray-400 font-medium">Risk</th>
+              <th className="text-center py-3 px-4 text-gray-400 font-medium">Chart</th>
             </tr>
           </thead>
           <tbody>
             {portfolioData.map((position) => {
               const category = getCategoryForSymbol(position.symbol);
-              const riskLevel = RISK_LEVELS[category] || 'medium';
               const isPositive = position.change24h >= 0;
               const currentPrice = position.value / position.amount;
 
@@ -83,10 +79,17 @@ export function HoldingsTable() {
                   <td className="py-4 px-4 text-right text-white">
                     {position.percentage.toFixed(1)}%
                   </td>
-                  <td className="py-4 px-4 text-right">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getRiskBadgeColor(riskLevel)}`}>
-                      {riskLevel.toUpperCase()}
-                    </span>
+                  <td className="py-4 px-4 text-center">
+                    <a
+                      href={getCoinMarketCapUrl(position.symbol)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center space-x-1 text-crypto-accent hover:text-crypto-primary transition-colors group"
+                      title={`View ${position.symbol} chart on CoinMarketCap`}
+                    >
+                      <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                      <span className="text-sm font-medium">Chart</span>
+                    </a>
                   </td>
                 </tr>
               );

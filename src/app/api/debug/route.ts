@@ -8,6 +8,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
+  // Safely extract cookies
+  const cookies: Record<string, string> = {};
+  request.cookies.forEach((value, key) => {
+    cookies[key] = key === 'auth-token' ? `${value.substring(0, 10)}...` : value;
+  });
+
   const debugInfo = {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
@@ -17,12 +23,7 @@ export async function GET(request: NextRequest) {
     jwtSecretLength: process.env.JWT_SECRET?.length || 0,
     host: request.headers.get('host'),
     userAgent: request.headers.get('user-agent'),
-    cookies: Object.fromEntries(
-      Array.from(request.cookies.entries()).map(([key, cookie]) => [
-        key, 
-        key === 'auth-token' ? `${cookie.value.substring(0, 10)}...` : cookie.value
-      ])
-    ),
+    cookies: cookies,
   };
 
   return NextResponse.json(debugInfo);

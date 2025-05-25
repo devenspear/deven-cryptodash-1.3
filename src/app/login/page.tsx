@@ -43,25 +43,25 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen gradient-bg flex items-center justify-center px-6">
+    <div className="min-h-screen gradient-bg flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
         {/* Logo and Title */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <div className="p-3 bg-crypto-accent/20 rounded-full glow-effect">
-              <TrendingUp className="w-12 h-12 text-crypto-accent" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="flex items-center justify-center mb-3 sm:mb-4">
+            <div className="p-2 sm:p-3 bg-crypto-accent/20 rounded-full glow-effect">
+              <TrendingUp className="w-10 h-10 sm:w-12 sm:h-12 text-crypto-accent" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-gradient mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gradient mb-2">
             Deven Crypto Dashboard
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm sm:text-base">
             Enter your password to access your portfolio
           </p>
         </div>
 
         {/* Login Form */}
-        <div className="card-gradient rounded-xl p-8">
+        <div className="card-gradient rounded-xl p-6 sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
@@ -76,7 +76,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-12 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-crypto-accent focus:outline-none focus:ring-1 focus:ring-crypto-accent transition-colors"
+                  className="block w-full pl-10 pr-12 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:border-crypto-accent focus:outline-none focus:ring-1 focus:ring-crypto-accent transition-colors text-base"
                   placeholder="Enter your password"
                   required
                 />
@@ -98,7 +98,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading || !password}
-              className="w-full py-3 px-4 bg-gradient-to-r from-crypto-accent to-crypto-purple hover:from-crypto-accent/80 hover:to-crypto-purple/80 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] glow-effect"
+              className="w-full py-3 px-4 bg-gradient-to-r from-crypto-accent to-crypto-purple hover:from-crypto-accent/80 hover:to-crypto-purple/80 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] glow-effect text-base"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center space-x-2">
@@ -113,12 +113,12 @@ export default function LoginPage() {
 
           {/* Security Features */}
           <div className="mt-6 space-y-3">
-            <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700/50">
+            <div className="p-3 sm:p-4 bg-gray-800/30 rounded-lg border border-gray-700/50">
               <p className="text-xs text-gray-400 text-center">
                 🔒 Secured with server-side JWT authentication
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-3 text-xs text-gray-500">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 text-xs text-gray-500">
               <div className="text-center">
                 ✓ HTTP-only cookies
               </div>
@@ -136,7 +136,7 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8">
+        <div className="text-center mt-6 sm:mt-8">
           <p className="text-gray-500 text-sm">
             Built by Deven using ClaudeAI
           </p>

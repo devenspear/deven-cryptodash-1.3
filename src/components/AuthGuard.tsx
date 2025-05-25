@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import { Navbar } from './Navbar';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -88,6 +89,23 @@ export function AuthGuard({ children }: AuthGuardProps) {
     );
   }
 
-  // Show login page or dashboard content
+  // If authenticated, show navbar and main content
+  if (isAuthenticated && !isPublicRoute) {
+    return (
+      <>
+        <Navbar />
+        <main className="container mx-auto px-4 py-8">
+          {children}
+        </main>
+      </>
+    );
+  }
+
+  // If on public route (login), show content without navbar
+  if (isPublicRoute) {
+    return <>{children}</>;
+  }
+
+  // Fallback - should not reach here normally
   return <>{children}</>;
 } 

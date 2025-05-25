@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { Toaster } from 'react-hot-toast';
-import { Navbar } from "@/components/Navbar";
 import { AuthGuard } from "@/components/AuthGuard";
 
 const inter = Inter({ subsets: ['latin'] });
@@ -20,13 +19,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <meta 
+          name="viewport" 
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" 
+        />
+      </head>
       <body className={`${inter.className} gradient-bg min-h-screen`}>
         <Providers>
           <AuthGuard>
-            <Navbar />
-            <main className="container mx-auto px-4 py-8">
-              {children}
-            </main>
+            {children}
           </AuthGuard>
           <Toaster
             position="top-right"

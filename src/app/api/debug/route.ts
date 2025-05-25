@@ -10,9 +10,12 @@ export async function GET(request: NextRequest) {
 
   // Safely extract cookies
   const cookies: Record<string, string> = {};
-  request.cookies.forEach((value, key) => {
-    cookies[key] = key === 'auth-token' ? `${value.substring(0, 10)}...` : value;
-  });
+  const cookieEntries = request.cookies.getAll();
+  for (const cookie of cookieEntries) {
+    cookies[cookie.name] = cookie.name === 'auth-token' 
+      ? `${cookie.value.substring(0, 10)}...` 
+      : cookie.value;
+  }
 
   const debugInfo = {
     timestamp: new Date().toISOString(),

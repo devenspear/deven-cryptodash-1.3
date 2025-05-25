@@ -18,7 +18,7 @@ type SortField = 'symbol' | 'amount';
 type SortDirection = 'asc' | 'desc' | null;
 
 export default function AdminPage() {
-  const { holdings, addHolding, updateHolding, removeHolding, setHoldings } = usePortfolioStore();
+  const { holdings, addHolding, updateHolding, removeHolding } = usePortfolioStore();
   const [editableData, setEditableData] = useState<EditableHolding[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [sortField, setSortField] = useState<SortField | null>(null);

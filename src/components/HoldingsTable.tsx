@@ -197,60 +197,76 @@ export function HoldingsTable() {
           <thead>
             <tr className="border-b border-gray-700">
               <th 
-                className="text-left py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
+                className="text-left py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target w-[180px]"
                 onClick={() => handleSort('symbol')}
               >
-                <div className="flex items-center space-x-2">
-                  <span>Asset</span>
-                  <SortIcon field="symbol" />
+                <div className="flex items-center space-x-2 min-w-0">
+                  <span className="truncate">Asset</span>
+                  <div className="flex-shrink-0">
+                    <SortIcon field="symbol" />
+                  </div>
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target w-[120px]"
                 onClick={() => handleSort('price')}
               >
-                <div className="flex items-center justify-end space-x-2">
-                  <span>Price</span>
-                  <SortIcon field="price" />
+                <div className="flex items-center justify-end space-x-2 min-w-0">
+                  <span className="truncate">Price</span>
+                  <div className="flex-shrink-0">
+                    <SortIcon field="price" />
+                  </div>
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target w-[120px]"
                 onClick={() => handleSort('holdings')}
               >
-                <div className="flex items-center justify-end space-x-2">
-                  <span>Holdings</span>
-                  <SortIcon field="holdings" />
+                <div className="flex items-center justify-end space-x-2 min-w-0">
+                  <span className="truncate">Holdings</span>
+                  <div className="flex-shrink-0">
+                    <SortIcon field="holdings" />
+                  </div>
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target w-[120px]"
                 onClick={() => handleSort('value')}
               >
-                <div className="flex items-center justify-end space-x-2">
-                  <span>Value</span>
-                  <SortIcon field="value" />
+                <div className="flex items-center justify-end space-x-2 min-w-0">
+                  <span className="truncate">Value</span>
+                  <div className="flex-shrink-0">
+                    <SortIcon field="value" />
+                  </div>
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target w-[140px]"
                 onClick={() => handleSort('change')}
               >
-                <div className="flex items-center justify-end space-x-2">
-                  <span>24h Change</span>
-                  <SortIcon field="change" />
+                <div className="flex items-center justify-end space-x-2 min-w-0">
+                  <span className="truncate">24h Change</span>
+                  <div className="flex-shrink-0">
+                    <SortIcon field="change" />
+                  </div>
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target w-[120px]"
                 onClick={() => handleSort('allocation')}
               >
-                <div className="flex items-center justify-end space-x-2">
-                  <span>Allocation</span>
-                  <SortIcon field="allocation" />
+                <div className="flex items-center justify-end space-x-2 min-w-0">
+                  <span className="truncate">Allocation</span>
+                  <div className="flex-shrink-0">
+                    <SortIcon field="allocation" />
+                  </div>
                 </div>
               </th>
-              <th className="text-center py-3 px-4 text-gray-400 font-medium">Chart</th>
+              <th className="text-center py-3 px-4 text-gray-400 font-medium w-[100px]">
+                <div className="flex items-center justify-center">
+                  <span>Chart</span>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -261,57 +277,69 @@ export function HoldingsTable() {
 
               return (
                 <tr key={position.symbol} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors">
-                  <td className="py-4 px-4">
-                    <div className="flex items-center space-x-3">
+                  <td className="py-4 px-4 w-[180px]">
+                    <div className="flex items-center space-x-3 min-w-0">
                       <div 
                         className="w-3 h-3 rounded-full flex-shrink-0"
                         style={{ backgroundColor: CATEGORY_COLORS[category] || '#94a3b8' }}
                       />
-                      <div>
-                        <div className="font-semibold text-white">{position.symbol}</div>
-                        <div className="text-sm text-gray-400">{category}</div>
+                      <div className="min-w-0 flex-1">
+                        <div className="font-semibold text-white truncate">{position.symbol}</div>
+                        <div className="text-sm text-gray-400 truncate">{category}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 px-4 text-right text-white font-medium">
-                    {formatPrice(currentPrice)}
+                  <td className="py-4 px-4 text-right text-white font-medium w-[120px]">
+                    <div className="truncate">
+                      {formatPrice(currentPrice)}
+                    </div>
                   </td>
-                  <td className="py-4 px-4 text-right text-white">
-                    {position.amount.toLocaleString(undefined, { 
-                      maximumFractionDigits: position.amount < 1 ? 6 : 2 
-                    })}
+                  <td className="py-4 px-4 text-right text-white w-[120px]">
+                    <div className="truncate">
+                      {position.amount.toLocaleString(undefined, { 
+                        maximumFractionDigits: position.amount < 1 ? 6 : 2 
+                      })}
+                    </div>
                   </td>
-                  <td className="py-4 px-4 text-right text-white font-semibold">
-                    {formatNumber(position.value)}
+                  <td className="py-4 px-4 text-right text-white font-semibold w-[120px]">
+                    <div className="truncate">
+                      {formatNumber(position.value)}
+                    </div>
                   </td>
-                  <td className="py-4 px-4 text-right">
-                    <div className={`flex items-center justify-end space-x-1 ${
+                  <td className="py-4 px-4 text-right w-[140px]">
+                    <div className={`flex items-center justify-end space-x-1 min-w-0 ${
                       isPositive ? 'text-crypto-success' : 'text-crypto-danger'
                     }`}>
-                      {isPositive ? (
-                        <TrendingUp className="w-4 h-4" />
-                      ) : (
-                        <TrendingDown className="w-4 h-4" />
-                      )}
-                      <span className="font-medium">
+                      <div className="flex-shrink-0">
+                        {isPositive ? (
+                          <TrendingUp className="w-4 h-4" />
+                        ) : (
+                          <TrendingDown className="w-4 h-4" />
+                        )}
+                      </div>
+                      <span className="font-medium truncate">
                         {isPositive ? '+' : ''}{position.change24h.toFixed(2)}%
                       </span>
                     </div>
                   </td>
-                  <td className="py-4 px-4 text-right text-white">
-                    {position.percentage.toFixed(1)}%
+                  <td className="py-4 px-4 text-right text-white w-[120px]">
+                    <div className="truncate">
+                      {position.percentage.toFixed(1)}%
+                    </div>
                   </td>
-                  <td className="py-4 px-4 text-center">
-                    <a
-                      href={getTradingViewUrl(position.symbol)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-1 text-crypto-accent hover:text-crypto-primary transition-colors group touch-target p-2 rounded-lg hover:bg-crypto-accent/10"
-                      title={`View ${position.symbol} chart on TradingView`}
-                    >
-                      <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                      <span className="text-sm font-medium">Chart</span>
-                    </a>
+                  <td className="py-4 px-4 text-center w-[100px]">
+                    <div className="flex items-center justify-center">
+                      <a
+                        href={getTradingViewUrl(position.symbol)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center space-x-1 text-crypto-accent hover:text-crypto-primary transition-colors group touch-target p-2 rounded-lg hover:bg-crypto-accent/10"
+                        title={`View ${position.symbol} chart on TradingView`}
+                      >
+                        <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium">Chart</span>
+                      </a>
+                    </div>
                   </td>
                 </tr>
               );

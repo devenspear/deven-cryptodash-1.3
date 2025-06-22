@@ -58,23 +58,21 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
       }));
     }
     
-    const response = await axios.get(`${COINGECKO_API}/simple/price`, {
+    // Use CoinGecko's markets endpoint which provides more data
+    const response = await axios.get(`${COINGECKO_API}/coins/markets`, {
       params: {
         ids,
-        vs_currencies: 'usd',
-        include_24hr_change: true,
-        include_7d_change: true,
-        include_30d_change: true,
-        include_market_cap: true,
-        include_24hr_vol: true,
+        vs_currency: 'usd',
+        price_change_percentage: '24h,7d,30d',
+        per_page: 250,
       },
     });
     
     const prices: Price[] = symbols.map(symbol => {
       const id = symbolToId[symbol];
-      const data = response.data[id];
+      const coinData = response.data.find((coin: any) => coin.id === id);
       
-      if (!data) {
+      if (!coinData) {
         return {
           symbol,
           current: 0,
@@ -86,12 +84,12 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
     
       return {
         symbol,
-        current: data.usd || 0,
-        change24h: data.usd_24h_change || 0,
-        change7d: data.usd_7d_change || 0,
-        change30d: data.usd_30d_change || 0,
-        marketCap: data.usd_market_cap || 0,
-        volume24h: data.usd_24h_vol || 0,
+        current: coinData.current_price || 0,
+        change24h: coinData.price_change_percentage_24h || 0,
+        change7d: coinData.price_change_percentage_7d_in_currency || 0,
+        change30d: coinData.price_change_percentage_30d_in_currency || 0,
+        marketCap: coinData.market_cap || 0,
+        volume24h: coinData.total_volume || 0,
       };
     });
     

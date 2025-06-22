@@ -86,7 +86,6 @@ export function Navbar() {
             onClick={toggleMobileMenu}
             className="md:hidden touch-target p-2 rounded-lg hover:bg-gray-800/50 text-gray-300 hover:text-white transition-colors"
             aria-label="Toggle mobile menu"
-            aria-expanded={String(isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
               <X className="w-6 h-6" />

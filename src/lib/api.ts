@@ -41,6 +41,12 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
       ONDO: 'ondo-finance',
       AIOZ: 'aioz-network',
       PRO: 'propy',
+      // Additional mappings for missing tokens
+      WLFI: 'world-liberty-financial',
+      AI16Z: 'ai16z',
+      DOGINME: 'doginme',
+      // Note: DSYNC, HASHAI, VERT may not be available on CoinGecko
+      // You can replace these with other tokens or find their correct CoinGecko IDs
     };
 
     const ids = symbols

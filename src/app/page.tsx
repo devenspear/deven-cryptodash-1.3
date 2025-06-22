@@ -3,6 +3,7 @@
 import { PortfolioOverview } from '@/components/PortfolioOverview';
 import { PortfolioChart } from '@/components/PortfolioChart';
 import { HoldingsTable } from '@/components/HoldingsTable';
+import { QuickStats } from '@/components/QuickStats';
 import { usePrices } from '@/hooks/usePrices';
 import { Loader2 } from 'lucide-react';
 
@@ -11,10 +12,10 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="card-gradient rounded-xl p-8 text-center">
-          <h2 className="text-xl font-semibold text-white mb-2">Error Loading Data</h2>
-          <p className="text-gray-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="card-gradient rounded-xl p-6 sm:p-8 text-center">
+          <h2 className="text-lg sm:text-xl font-semibold text-white mb-2">Error Loading Data</h2>
+          <p className="text-gray-400 text-sm sm:text-base">
             Unable to fetch price data. Please check your connection and try again.
           </p>
         </div>
@@ -23,36 +24,19 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-6 sm:pb-8">
       {isLoading && (
-        <div className="flex items-center justify-center mb-6">
-          <Loader2 className="w-6 h-6 animate-spin text-crypto-accent mr-2" />
-          <span className="text-gray-400">Loading portfolio data...</span>
+        <div className="flex items-center justify-center mb-4 sm:mb-6">
+          <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin text-crypto-accent mr-2" />
+          <span className="text-gray-400 text-sm sm:text-base">Loading portfolio data...</span>
         </div>
       )}
       
       <PortfolioOverview />
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
         <PortfolioChart />
-        
-        <div className="card-gradient rounded-xl p-6">
-          <h3 className="text-xl font-semibold text-white mb-6">Quick Stats</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-400">Best Performer (24h)</span>
-              <span className="text-crypto-success font-semibold">Loading...</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-400">Worst Performer (24h)</span>
-              <span className="text-crypto-danger font-semibold">Loading...</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-400">Last Updated</span>
-              <span className="text-white">{new Date().toLocaleTimeString()}</span>
-            </div>
-          </div>
-        </div>
+        <QuickStats />
       </div>
       
       <HoldingsTable />

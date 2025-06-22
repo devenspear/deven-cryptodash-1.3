@@ -8,8 +8,24 @@ export interface Price {
   symbol: string;
   current: number;
   change24h: number;
+  change7d?: number;
+  change30d?: number;
   marketCap?: number;
   volume24h?: number;
+}
+
+export interface TimeframeData {
+  changeAmount: number;
+  changePercent: number;
+}
+
+export interface PerformanceStats {
+  bestPerformer24h: { symbol: string; change: number } | null;
+  worstPerformer24h: { symbol: string; change: number } | null;
+  bestPerformer7d: { symbol: string; change: number } | null;
+  worstPerformer7d: { symbol: string; change: number } | null;
+  bestPerformer30d: { symbol: string; change: number } | null;
+  worstPerformer30d: { symbol: string; change: number } | null;
 }
 
 export interface OnChainMetrics {

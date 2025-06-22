@@ -96,21 +96,108 @@ export function HoldingsTable() {
   const sortedData = getSortedData();
 
   return (
-    <div className="card-gradient rounded-xl p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-white">Holdings</h3>
+    <div className="card-gradient rounded-xl p-3 sm:p-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <h3 className="text-lg sm:text-xl font-semibold text-white">Holdings</h3>
         {sortField && (
-          <span className="text-crypto-accent text-sm font-medium">
+          <span className="text-crypto-accent text-xs sm:text-sm font-medium">
             Sorted by {sortField} ({sortDirection})
           </span>
         )}
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full">
+
+      {/* Mobile Card Layout */}
+      <div className="block md:hidden space-y-3">
+        {sortedData.map((position) => {
+          const category = getCategoryForSymbol(position.symbol);
+          const isPositive = position.change24h >= 0;
+          const currentPrice = position.value / position.amount;
+
+          return (
+            <div key={position.symbol} className="bg-gray-800/30 rounded-lg p-4 space-y-3">
+              {/* Header */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div 
+                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: CATEGORY_COLORS[category] || '#94a3b8' }}
+                  />
+                  <div>
+                    <div className="font-semibold text-white text-base">{position.symbol}</div>
+                    <div className="text-xs text-gray-400">{category}</div>
+                  </div>
+                </div>
+                <a
+                  href={getTradingViewUrl(position.symbol)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="touch-target p-2 rounded-lg text-crypto-accent hover:text-crypto-primary transition-colors hover:bg-crypto-accent/10 active:bg-crypto-accent/20"
+                  title={`View ${position.symbol} chart on TradingView`}
+                >
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <div className="text-gray-400 text-xs mb-1">Price</div>
+                  <div className="font-medium text-white">{formatPrice(currentPrice)}</div>
+                </div>
+                <div>
+                  <div className="text-gray-400 text-xs mb-1">Holdings</div>
+                  <div className="font-medium text-white">
+                    {position.amount.toLocaleString(undefined, { 
+                      maximumFractionDigits: position.amount < 1 ? 6 : 2 
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-gray-400 text-xs mb-1">Value</div>
+                  <div className="font-semibold text-white">{formatNumber(position.value)}</div>
+                </div>
+                <div>
+                  <div className="text-gray-400 text-xs mb-1">24h Change</div>
+                  <div className={`flex items-center space-x-1 ${
+                    isPositive ? 'text-crypto-success' : 'text-crypto-danger'
+                  }`}>
+                    {isPositive ? (
+                      <TrendingUp className="w-3 h-3" />
+                    ) : (
+                      <TrendingDown className="w-3 h-3" />
+                    )}
+                    <span className="font-medium text-sm">
+                      {isPositive ? '+' : ''}{position.change24h.toFixed(2)}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Allocation Bar */}
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-gray-400 text-xs">Allocation</span>
+                  <span className="text-white text-sm font-medium">{position.percentage.toFixed(1)}%</span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-2">
+                  <div 
+                    className="bg-crypto-accent rounded-full h-2 transition-all duration-300"
+                    style={{ width: `${Math.min(position.percentage, 100)}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop Table Layout */}
+      <div className="hidden md:block overflow-x-auto mobile-scroll">
+        <table className="w-full min-w-[800px]">
           <thead>
             <tr className="border-b border-gray-700">
               <th 
-                className="text-left py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none"
+                className="text-left py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
                 onClick={() => handleSort('symbol')}
               >
                 <div className="flex items-center space-x-2">
@@ -119,7 +206,7 @@ export function HoldingsTable() {
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
                 onClick={() => handleSort('price')}
               >
                 <div className="flex items-center justify-end space-x-2">
@@ -128,7 +215,7 @@ export function HoldingsTable() {
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
                 onClick={() => handleSort('holdings')}
               >
                 <div className="flex items-center justify-end space-x-2">
@@ -137,7 +224,7 @@ export function HoldingsTable() {
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
                 onClick={() => handleSort('value')}
               >
                 <div className="flex items-center justify-end space-x-2">
@@ -146,7 +233,7 @@ export function HoldingsTable() {
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
                 onClick={() => handleSort('change')}
               >
                 <div className="flex items-center justify-end space-x-2">
@@ -155,7 +242,7 @@ export function HoldingsTable() {
                 </div>
               </th>
               <th 
-                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none"
+                className="text-right py-3 px-4 text-gray-400 font-medium cursor-pointer hover:bg-gray-800/50 transition-colors select-none touch-target"
                 onClick={() => handleSort('allocation')}
               >
                 <div className="flex items-center justify-end space-x-2">
@@ -177,7 +264,7 @@ export function HoldingsTable() {
                   <td className="py-4 px-4">
                     <div className="flex items-center space-x-3">
                       <div 
-                        className="w-3 h-3 rounded-full"
+                        className="w-3 h-3 rounded-full flex-shrink-0"
                         style={{ backgroundColor: CATEGORY_COLORS[category] || '#94a3b8' }}
                       />
                       <div>
@@ -219,7 +306,7 @@ export function HoldingsTable() {
                       href={getTradingViewUrl(position.symbol)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-1 text-crypto-accent hover:text-crypto-primary transition-colors group"
+                      className="inline-flex items-center space-x-1 text-crypto-accent hover:text-crypto-primary transition-colors group touch-target p-2 rounded-lg hover:bg-crypto-accent/10"
                       title={`View ${position.symbol} chart on TradingView`}
                     >
                       <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />

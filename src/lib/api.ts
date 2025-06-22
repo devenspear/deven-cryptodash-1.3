@@ -53,6 +53,8 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
         symbol,
         current: 0,
         change24h: 0,
+        change7d: 0,
+        change30d: 0,
       }));
     }
     
@@ -61,6 +63,8 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
         ids,
         vs_currencies: 'usd',
         include_24hr_change: true,
+        include_7d_change: true,
+        include_30d_change: true,
         include_market_cap: true,
         include_24hr_vol: true,
       },
@@ -75,6 +79,8 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
           symbol,
           current: 0,
           change24h: 0,
+          change7d: 0,
+          change30d: 0,
         };
       }
     
@@ -82,6 +88,8 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
         symbol,
         current: data.usd || 0,
         change24h: data.usd_24h_change || 0,
+        change7d: data.usd_7d_change || 0,
+        change30d: data.usd_30d_change || 0,
         marketCap: data.usd_market_cap || 0,
         volume24h: data.usd_24h_vol || 0,
       };
@@ -95,6 +103,8 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
       symbol,
       current: 0,
       change24h: 0,
+      change7d: 0,
+      change30d: 0,
     }));
   }
 }

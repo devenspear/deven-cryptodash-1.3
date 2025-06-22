@@ -5,10 +5,30 @@
 @layer base {
   html {
     @apply bg-crypto-dark text-white;
+    /* iOS Safari viewport fix */
+    height: 100%;
+    height: -webkit-fill-available;
   }
   
   body {
     @apply font-sans antialiased;
+    /* iOS Safari viewport fix */
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    /* Prevent iOS bounce scrolling */
+    overscroll-behavior: none;
+    /* Improve touch scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better touch targets for mobile */
+  button, a {
+    touch-action: manipulation;
+  }
+
+  /* Prevent zoom on inputs for iOS */
+  input, select, textarea {
+    font-size: 16px;
   }
 }
 
@@ -28,21 +48,79 @@
   .glow-effect {
     @apply shadow-[0_0_20px_rgba(0,212,255,0.3)];
   }
+
+  /* Mobile-optimized touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+
+  /* Mobile-friendly sticky positioning */
+  .mobile-sticky {
+    position: sticky;
+    top: 0;
+    /* iOS Safari safe area support */
+    top: env(safe-area-inset-top);
+  }
+
+  /* iOS Safari safe area support */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Improved mobile scrolling */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .mobile-scroll::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+/* Custom scrollbar - hidden on mobile */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-crypto-accent/50 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-crypto-accent/70;
+  }
 }
 
-::-webkit-scrollbar-track {
-  @apply bg-gray-900;
+/* Mobile-specific styles */
+@media (max-width: 767px) {
+  .mobile-padding {
+    @apply px-4 py-3;
+  }
+  
+  .mobile-text {
+    @apply text-sm;
+  }
+  
+  .mobile-grid {
+    @apply grid-cols-1 gap-4;
+  }
+
+  /* Improve tap targets on mobile */
+  .tap-highlight-transparent {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  @apply bg-crypto-accent/50 rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-crypto-accent/70;
+/* Landscape orientation fixes for mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .mobile-sticky {
+    position: fixed;
+  }
 } 

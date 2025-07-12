@@ -25,6 +25,11 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-6 sm:pb-8">
+      {/* Deployment validation timestamp */}
+      <div className="text-xs text-gray-500 text-center mb-2">
+        🚀 Build: Jul 12, 2025 - 7:45 PM EST | 43 New Tokens Live
+      </div>
+      
       {isLoading && (
         <div className="flex items-center justify-center mb-4 sm:mb-6">
           <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin text-crypto-accent mr-2" />

@@ -45,21 +45,6 @@ export async function fetchPrices(symbols: string[]): Promise<Price[]> {
       WLFI: 'world-liberty-financial',
       AI16Z: 'ai16z',
       DOGINME: 'doginme',
-      USDT: 'tether',
-      FET: 'fetch-ai',
-      RNDR: 'render-token',
-      APE: 'apecoin',
-      ARB: 'arbitrum',
-      TAO: 'bittensor',
-      PAAL: 'paal-ai',
-      TRUMP: 'maga',
-      BEAM: 'beam-2',
-      AIXBT: 'aixbt-by-virtuals',
-      HASHAI: 'hashai',
-      VERTAI: 'vert-ai',
-      DSYNC: 'dsync',
-      RIO: 'rio-network',
-      '0X0': '0x0-ai-ai-smart-contract',
       // Note: DSYNC, HASHAI, VERT may not be available on CoinGecko
       // You can replace these with other tokens or find their correct CoinGecko IDs
     };

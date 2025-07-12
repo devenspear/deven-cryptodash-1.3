@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePortfolioStore } from '@/lib/store';
 import { Plus, Trash2, Save, RotateCcw, Download, Upload, ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 interface EditableHolding {
   id: string;
@@ -355,6 +356,29 @@ export default function AdminPage() {
     }
   };
 
+  // Add state for mapping results and modal
+  const [mappingResults, setMappingResults] = useState<any>(null);
+  const [showMappingModal, setShowMappingModal] = useState(false);
+  const [lastMappingUpdate, setLastMappingUpdate] = useState<string | null>(null);
+
+  const handleUpdateMapping = async () => {
+    try {
+      const res = await axios.post('/api/update-mapping');
+      if (res.data.success) {
+        setMappingResults(res.data);
+        setLastMappingUpdate(res.data.updatedAt);
+        setShowMappingModal(true);
+        const failed = res.data.failed.length;
+        const total = res.data.details.length;
+        toast.success(`Token mapping updated! ${total - failed}/${total} mapped, ${failed} failed.`);
+      } else {
+        toast.error('Failed to update mapping: ' + res.data.error);
+      }
+    } catch (err: any) {
+      toast.error('Error updating mapping: ' + (err.message || err));
+    }
+  };
+
   const visibleData = editableData.filter(item => !item.isDeleted);
   const sortedData = getSortedData(visibleData);
 
@@ -452,6 +476,16 @@ export default function AdminPage() {
             <Save className="w-4 h-4" />
             <span>Save All Changes</span>
           </button>
+
+          <button
+            onClick={handleUpdateMapping}
+            className="px-4 py-2 bg-crypto-primary hover:bg-crypto-primary/80 text-white rounded-lg font-medium transition-colors"
+          >
+            Update Token Mapping
+          </button>
+          {lastMappingUpdate && (
+            <span className="text-xs text-gray-400 ml-2">Last mapping update: {new Date(lastMappingUpdate).toLocaleString()}</span>
+          )}
         </div>
       </div>
 
@@ -581,6 +615,43 @@ export default function AdminPage() {
           <div>• Save all changes at once with "Save"</div>
         </div>
       </div>
+
+      {/* Mapping Results Modal */}
+      {showMappingModal && mappingResults && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="bg-gray-900 rounded-lg p-6 max-w-lg w-full shadow-lg">
+            <h2 className="text-lg font-bold mb-2 text-crypto-accent">Token Mapping Results</h2>
+            <div className="max-h-64 overflow-y-auto text-sm">
+              <table className="w-full text-left">
+                <thead>
+                  <tr>
+                    <th className="pr-2">Symbol</th>
+                    <th className="pr-2">CoinGecko ID</th>
+                    <th className="pr-2">Name</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mappingResults.details.map((d: any) => (
+                    <tr key={d.symbol} className={d.status === 'not_found' ? 'text-crypto-warning' : ''}>
+                      <td>{d.symbol}</td>
+                      <td>{d.id || '-'}</td>
+                      <td>{d.name || '-'}</td>
+                      <td>{d.status === 'success' ? '✅' : '❌ Not Found'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <button
+              className="mt-4 px-4 py-2 bg-crypto-primary hover:bg-crypto-primary/80 text-white rounded-lg font-medium"
+              onClick={() => setShowMappingModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

@@ -15,6 +15,8 @@ interface PortfolioStore {
   removeHolding: (symbol: string) => void;
   setPrices: (prices: Price[]) => void;
   setMetrics: (symbol: string, metrics: OnChainMetrics) => void;
+  replaceAllHoldings: (newHoldings: Holding[]) => void;
+  clearAllHoldings: () => void;
   
   // Alerts
   addAlert: (alert: Omit<Alert, 'id'>) => void;
@@ -67,6 +69,12 @@ export const usePortfolioStore = create<PortfolioStore>()(
         set((state) => ({
           holdings: state.holdings.filter(h => h.symbol !== symbol),
         })),
+
+      replaceAllHoldings: (newHoldings) =>
+        set({ holdings: newHoldings }),
+
+      clearAllHoldings: () =>
+        set({ holdings: [] }),
 
       setPrices: (prices) =>
         set((state) => {

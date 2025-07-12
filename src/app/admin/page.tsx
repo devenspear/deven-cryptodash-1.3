@@ -18,7 +18,7 @@ type SortField = 'symbol' | 'amount';
 type SortDirection = 'asc' | 'desc' | null;
 
 export default function AdminPage() {
-  const { holdings, addHolding, updateHolding, removeHolding } = usePortfolioStore();
+  const { holdings, addHolding, updateHolding, removeHolding, replaceAllHoldings, clearAllHoldings } = usePortfolioStore();
   const [editableData, setEditableData] = useState<EditableHolding[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [sortField, setSortField] = useState<SortField | null>(null);
@@ -213,6 +213,148 @@ export default function AdminPage() {
     toast.success('Changes reset');
   };
 
+  const handleExport = () => {
+    const exportData = holdings.map(h => ({
+      symbol: h.symbol,
+      amount: h.amount
+    }));
+    
+    const csvContent = [
+      'Symbol,Amount',
+      ...exportData.map(h => `${h.symbol},${h.amount}`)
+    ].join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `crypto-portfolio-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success('Portfolio exported successfully!');
+  };
+
+  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const lines = content.trim().split('\n');
+        
+        // Skip header row
+        const dataLines = lines.slice(1);
+        
+        const newHoldings: { symbol: string; amount: number }[] = [];
+        
+        dataLines.forEach((line) => {
+          const [symbol, amount] = line.split(',');
+          if (symbol && amount && !isNaN(parseFloat(amount))) {
+            newHoldings.push({
+              symbol: symbol.trim().toUpperCase(),
+              amount: parseFloat(amount.trim())
+            });
+          }
+        });
+        
+        if (newHoldings.length === 0) {
+          toast.error('No valid holdings found in CSV file');
+          return;
+        }
+        
+        // Ask user if they want to replace all holdings or add to existing
+        const replace = confirm(
+          `Found ${newHoldings.length} holdings in CSV file.\n\n` +
+          `Click "OK" to REPLACE ALL current holdings\n` +
+          `Click "Cancel" to ADD to existing holdings`
+        );
+        
+        if (replace) {
+          // Replace all holdings
+          replaceAllHoldings(newHoldings);
+          // Update editable data to reflect the change
+          const newEditableData = newHoldings.map((holding, index) => ({
+            id: `imported-${index}`,
+            symbol: holding.symbol,
+            amount: holding.amount.toString(),
+            isNew: false,
+            isModified: false,
+            isDeleted: false,
+          }));
+          
+          // Add empty row for new entries
+          newEditableData.push({
+            id: `new-${Date.now()}`,
+            symbol: '',
+            amount: '',
+            isNew: true,
+            isModified: false,
+            isDeleted: false,
+          });
+          
+          setEditableData(newEditableData);
+          setHasChanges(false);
+          toast.success(`✅ REPLACED all holdings with ${newHoldings.length} new holdings from CSV`);
+        } else {
+          // Add to existing holdings
+          const importedData: EditableHolding[] = [];
+          
+          newHoldings.forEach((holding, index) => {
+            importedData.push({
+              id: `imported-${index}`,
+              symbol: holding.symbol,
+              amount: holding.amount.toString(),
+              isNew: true,
+              isModified: false,
+              isDeleted: false,
+            });
+          });
+          
+          // Add empty row for new entries
+          importedData.push({
+            id: `new-${Date.now()}`,
+            symbol: '',
+            amount: '',
+            isNew: true,
+            isModified: false,
+            isDeleted: false,
+          });
+          
+          setEditableData(prev => [...prev.filter(item => !item.isNew || item.symbol || item.amount), ...importedData]);
+          setHasChanges(true);
+          toast.success(`📥 Added ${newHoldings.length} holdings from CSV (click Save to confirm)`);
+        }
+        
+      } catch (error) {
+        toast.error('Error importing CSV file');
+        console.error('Import error:', error);
+      }
+    };
+    
+    reader.readAsText(file);
+    // Reset input
+    event.target.value = '';
+  };
+
+  const handleClearAll = () => {
+    if (confirm('⚠️  Are you sure you want to clear ALL holdings?\n\nThis will immediately remove all current holdings from your portfolio.')) {
+      clearAllHoldings();
+      // Reset editable data to empty state
+      setEditableData([{
+        id: `new-${Date.now()}`,
+        symbol: '',
+        amount: '',
+        isNew: true,
+        isModified: false,
+        isDeleted: false,
+      }]);
+      setHasChanges(false);
+      toast.success('🗑️  All holdings cleared successfully!');
+    }
+  };
+
   const visibleData = editableData.filter(item => !item.isDeleted);
   const sortedData = getSortedData(visibleData);
 
@@ -220,7 +362,17 @@ export default function AdminPage() {
     <div className="max-w-6xl mx-auto px-6">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gradient mb-2">Portfolio Spreadsheet</h1>
-        <p className="text-gray-400">Edit your portfolio like a spreadsheet - click cells to edit, add/delete rows, then save all changes</p>
+        <p className="text-gray-400 mb-4">Edit your portfolio like a spreadsheet - click cells to edit, add/delete rows, then save all changes</p>
+        
+        {/* Bulk Operations Help */}
+        <div className="card-gradient rounded-lg p-4 border-l-4 border-crypto-accent">
+          <h3 className="text-lg font-semibold text-crypto-accent mb-2">💡 Bulk Operations</h3>
+          <ul className="text-sm text-gray-300 space-y-1">
+            <li><strong>Export CSV:</strong> Download your current portfolio as a CSV file</li>
+            <li><strong>Import CSV:</strong> Upload a CSV file to replace ALL holdings (Format: Symbol,Amount)</li>
+            <li><strong>Clear All:</strong> Remove all current holdings to start fresh</li>
+          </ul>
+        </div>
       </div>
 
       {/* Action Bar */}
@@ -233,6 +385,40 @@ export default function AdminPage() {
             <Plus className="w-4 h-4" />
             <span>Add Row</span>
           </button>
+          
+          {/* Bulk Operations */}
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleExport}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              <span>Export CSV</span>
+            </button>
+            
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleImport}
+              className="hidden"
+              id="csv-import"
+            />
+            <button
+              onClick={() => document.getElementById('csv-import')?.click()}
+              className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Import CSV</span>
+            </button>
+            
+            <button
+              onClick={handleClearAll}
+              className="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span>Clear All</span>
+            </button>
+          </div>
           
           {hasChanges && (
             <span className="text-crypto-warning text-sm font-medium">

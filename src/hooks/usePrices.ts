@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchPrices, fetchOnChainMetrics } from '@/lib/api';
 import { usePortfolioStore } from '@/lib/store';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 export function usePrices() {
   const { holdings, setPrices } = usePortfolioStore();
@@ -15,12 +15,21 @@ export function usePrices() {
   });
 
   useEffect(() => {
-    if (query.data) {
-      setPrices(query.data);
+    if (query.data && query.dataUpdatedAt) {
+      // Pass the actual timestamp when data was last successfully fetched
+      setPrices(query.data, new Date(query.dataUpdatedAt));
     }
-  }, [query.data, setPrices]);
+  }, [query.data, query.dataUpdatedAt, setPrices]);
 
-  return query;
+  const manualRefresh = useCallback(async () => {
+    return await query.refetch();
+  }, [query.refetch]);
+
+  return {
+    ...query,
+    lastDataUpdate: query.dataUpdatedAt ? new Date(query.dataUpdatedAt) : null,
+    manualRefresh
+  };
 }
 
 export function useOnChainMetrics(symbol: string) {

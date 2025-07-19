@@ -6,7 +6,7 @@ import { TrendingUp, TrendingDown, Clock, Trophy, TrendingDown as WorstIcon } fr
 import { useState } from 'react';
 
 export function QuickStats() {
-  const { getPerformanceStats, getTimeframeChanges } = usePortfolioStore();
+  const { getPerformanceStats, getTimeframeChanges, getLastUpdateTime } = usePortfolioStore();
   const [selectedTimeframe, setSelectedTimeframe] = useState<'24h' | '7d' | '30d'>('24h');
   
   const performanceStats = getPerformanceStats();
@@ -122,7 +122,7 @@ export function QuickStats() {
             <Clock className="w-4 h-4 text-gray-400 mr-2 sm:mr-3 flex-shrink-0" />
             <span className="text-gray-400 text-sm sm:text-base truncate">Last Updated</span>
           </div>
-          <span className="text-white text-xs sm:text-sm ml-3 flex-shrink-0">{new Date().toLocaleTimeString()}</span>
+          <span className="text-white text-xs sm:text-sm ml-3 flex-shrink-0">{getLastUpdateTime()}</span>
         </div>
       </div>
     </div>

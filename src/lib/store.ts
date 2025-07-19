@@ -8,12 +8,13 @@ interface PortfolioStore {
   prices: Record<string, Price>;
   alerts: Alert[];
   metrics: Record<string, OnChainMetrics>;
+  lastDataUpdate: Date | null;
   
   // Actions
   addHolding: (holding: Holding) => void;
   updateHolding: (symbol: string, amount: number) => void;
   removeHolding: (symbol: string) => void;
-  setPrices: (prices: Price[]) => void;
+  setPrices: (prices: Price[], updateTime?: Date) => void;
   setMetrics: (symbol: string, metrics: OnChainMetrics) => void;
   replaceAllHoldings: (newHoldings: Holding[]) => void;
   clearAllHoldings: () => void;
@@ -37,6 +38,7 @@ interface PortfolioStore {
   }>;
   getPerformanceStats: () => PerformanceStats;
   getTimeframeChanges: (timeframe: '24h' | '7d' | '30d') => TimeframeData;
+  getLastUpdateTime: () => string;
 }
 
 export const usePortfolioStore = create<PortfolioStore>()(
@@ -46,6 +48,7 @@ export const usePortfolioStore = create<PortfolioStore>()(
       prices: {},
       alerts: [],
       metrics: {},
+      lastDataUpdate: null,
 
       addHolding: (holding) =>
         set((state) => {
@@ -76,13 +79,16 @@ export const usePortfolioStore = create<PortfolioStore>()(
       clearAllHoldings: () =>
         set({ holdings: [] }),
 
-      setPrices: (prices) =>
+      setPrices: (prices, updateTime) =>
         set((state) => {
           const priceMap = { ...state.prices };
           prices.forEach(price => {
             priceMap[price.symbol] = price;
           });
-          return { prices: priceMap };
+          return { 
+            prices: priceMap,
+            lastDataUpdate: updateTime || new Date()
+          };
         }),
 
       setMetrics: (symbol, metrics) =>
@@ -230,6 +236,22 @@ export const usePortfolioStore = create<PortfolioStore>()(
           changeAmount: totalChange,
           changePercent: totalChangePercent,
         };
+      },
+
+      getLastUpdateTime: () => {
+        const { lastDataUpdate } = get();
+        if (!lastDataUpdate) return 'No data updates yet';
+        
+        const updateTime = new Date(lastDataUpdate);
+        return updateTime.toLocaleString('en-US', {
+          timeZone: 'America/New_York',
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        });
       },
     }),
     {

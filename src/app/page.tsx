@@ -5,10 +5,25 @@ import { PortfolioChart } from '@/components/PortfolioChart';
 import { HoldingsTable } from '@/components/HoldingsTable';
 import { QuickStats } from '@/components/QuickStats';
 import { usePrices } from '@/hooks/usePrices';
+import { usePortfolioStore } from '@/lib/store';
+import { usePriceRefresh } from './providers';
 import { Loader2 } from 'lucide-react';
+import { useEffect } from 'react';
 
 export default function Dashboard() {
-  const { isLoading, error } = usePrices();
+  const { isLoading, error, manualRefresh } = usePrices();
+  const { getLastUpdateTime } = usePortfolioStore();
+  const { setRefreshFunction } = usePriceRefresh();
+
+  // Register the refresh function with the global context
+  useEffect(() => {
+    if (manualRefresh) {
+      setRefreshFunction(manualRefresh);
+    }
+    
+    // Cleanup: remove the refresh function when component unmounts
+    return () => setRefreshFunction(null);
+  }, [manualRefresh, setRefreshFunction]);
 
   if (error) {
     return (
@@ -25,9 +40,9 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-6 sm:pb-8">
-      {/* Deployment validation timestamp */}
+      {/* Actual data refresh timestamp */}
       <div className="text-xs text-gray-500 text-center mb-2">
-        🚀 Build: Jul 12, 2025 - 7:45 PM EST | 43 New Tokens Live
+        🚀 Last Data Update: {getLastUpdateTime()} EST | 43 New Tokens Live
       </div>
       
       {isLoading && (
